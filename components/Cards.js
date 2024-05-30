@@ -1,19 +1,50 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 
-const Cards = ({ items, isFirst, swipe, ...rest }) => {
+const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
   const rotate = swipe.x.interpolate({
     inputRange: [-100, 0, 100],
     outputRange: ['-8deg', '0deg', '8deg'],
   });
+
+  const frontOpacity = flipAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0, 0, 1],
+  });
+
+  const backOpacity = flipAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1, 1, 0],
+  });
+
+  const frontAnimatedStyle = {
+    opacity: frontOpacity,
+    transform: [{ rotateY: flipAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['180deg', '360deg'],
+    }) }],
+  };
+
+  const backAnimatedStyle = {
+    opacity: backOpacity,
+    transform: [{ rotateY: flipAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '180deg'],
+    }) }],
+  };
 
   return (
     <Animated.View
       style={[styles.cardContainer, isFirst && { transform: [...swipe.getTranslateTransform(), { rotate }] }]}
       {...rest}
     >
-      <Image style={styles.cardImage} source={items.image} />
-      <Text style={styles.cardTitle}>{items.title}</Text>
+      <Animated.View style={[styles.cardInner, styles.cardBackContainer, backAnimatedStyle]}>
+        <Image style={styles.cardImage} source={backImage} />
+      </Animated.View>
+      <Animated.View style={[styles.cardInner, frontAnimatedStyle]}>
+        <Image style={styles.cardImage} source={items.image} />
+        <Text style={styles.cardTitle}>{items.title}</Text>
+      </Animated.View>
     </Animated.View>
   );
 };
@@ -29,14 +60,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    margin: 60,
-  },
-  cardImage: {
     width: 350,
     height: 450,
+    margin: 60,
+  },
+  cardInner: {
+    backfaceVisibility: 'hidden',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  cardBackContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardImage: {
+    width: '100%',
+    height: '100%',
     borderRadius: 20,
-    // resizeMode: 'contain'
-
   },
   cardTitle: {
     fontSize: 28,

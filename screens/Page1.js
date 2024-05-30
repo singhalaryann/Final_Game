@@ -17,9 +17,12 @@ const getImageSource = (activeButton) => {
   }
 };
 
+const backImage = require('../assets/cardBack.png');
+
 const Page1 = ({ navigation, route }) => {
   const { activeButton } = route.params;
   const [currentButton, setCurrentButton] = useState(activeButton);
+  const [ cardsPlaced, setCardsPlaced ] = useState(false);
 
   const remainingCards = ['M', 'R', 'E', 'S'].filter(button => button !== activeButton);
 
@@ -34,28 +37,49 @@ const Page1 = ({ navigation, route }) => {
 
   const swipe = useRef(new Animated.ValueXY()).current;
   const scales = initialData.map(() => useRef(new Animated.Value(0)).current);
+  const flipAnims = initialData.map(() => useRef(new Animated.Value(0)).current);
 
   useEffect(() => {
     const staggerDelay = 200; // Delay between each card animation
-    const animations = initialData.map((_, index) => {
-      return setTimeout(() => {
+    initialData.forEach((_, index) => {
+      setTimeout(() => {
         Animated.spring(scales[index], {
           toValue: 1,
           useNativeDriver: true,
           friction: 5,
           tension: 10,
-        }).start();
+        }).start(() => {
+          // Start flip animation only for the first card
+          if (index === 0) {
+            Animated.spring(flipAnims[index], {
+              toValue: 1,
+              useNativeDriver: true,
+              friction: 5,
+              tension: 10,
+            }).start();
+          } else {
+            // Add a delay for other cards
+            setTimeout(() => {
+              flipAnims[index].setValue(1);
+              if(index >= 3) {
+                setCardsPlaced(true);
+              }
+            }, staggerDelay * 2 * index); // Apply staggered delay
+          }
+        });
       }, (initialData.length - index - 1) * staggerDelay); // Apply staggered delay in reverse order
     });
 
     return () => {
-      // Clear timeouts if component unmounts before all animations are completed
-      animations.forEach(animation => clearTimeout(animation));
+      initialData.forEach((_, index) => clearTimeout(index));
     };
-  }, []);
+  }, [ cardsPlaced ]);
+
+
 
   const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => true,
+    onStartShouldSetPanResponder: () => cardsPlaced,
+    onMoveShouldSetPanResponder: () => cardsPlaced,
     onPanResponderMove: (_, { dx, dy }) => {
       swipe.setValue({ x: dx, y: dy });
     },
@@ -83,6 +107,14 @@ const Page1 = ({ navigation, route }) => {
       if (prevState.length > 1) {
         const nextCard = prevState[1].title.split(' ')[0].charAt(0);
         setCurrentButton(nextCard);
+
+        // Flip the next card silently
+        Animated.spring(flipAnims[1], {
+          toValue: 1,
+          useNativeDriver: true,
+          friction: 5,
+          tension: 10,
+        }).start();
       }
       return prevState.slice(1);
     });
@@ -131,7 +163,7 @@ const Page1 = ({ navigation, route }) => {
 
         return (
           <Animated.View key={item.id} style={[styles.cardContainer, cardStyle]} {...dragHandlers}>
-            <Cards items={item} isFirst={isFirst} swipe={swipe} />
+            <Cards backImage={backImage} items={item} isFirst={isFirst} swipe={swipe} flipAnim={flipAnims[index]} />
           </Animated.View>
         );
       }).reverse()}
