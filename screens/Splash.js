@@ -1,18 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useFonts } from 'expo-font';
-import { AppLoading } from 'expo';
 const { width } = Dimensions.get('window');
 
 const Splash = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     'Michroma-Regular': require('../assets/fonts/Michroma-Regular.ttf'),
   });
-
-  // // Render AppLoading until fonts are loaded
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
 
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const textOpacity = useRef(new Animated.Value(0)).current;
@@ -70,22 +64,22 @@ const Splash = ({ navigation }) => {
     outputRange: ['0deg', '360deg'],
   });
 
-  return(
-    <View style={styles.container}>
-      <View style={styles.centeredContainer}>
-        <Animated.Image
-          style={[styles.image, { transform: [{ rotate: spin }], opacity: imageOpacity }]}
-          source={require('../assets/KA2.png')}
-        />
-        <Animated.View style={[styles.textContainer, { opacity: textOpacity }]}>
-          <Text style={styles.mainText}>Swipe Kingdoms:</Text>
-          <Text style={styles.subText}>KINGDOMS</Text>
-        </Animated.View>
-      </View>
-      <TouchableOpacity style={styles.tapButton} onPress={() => navigation.navigate('MainScreen')}>
+  return (
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('MainScreen', { screen: 'MainScreen' })}>
+      <View style={styles.container}>
+        <View style={styles.centeredContainer}>
+          <Animated.Image
+            style={[styles.image, { transform: [{ rotate: spin }], opacity: imageOpacity }]}
+            source={require('../assets/KA2.png')}
+          />
+          <Animated.View style={[styles.textContainer, { opacity: textOpacity }]}>
+            <Text style={styles.mainText}>Swipe Kingdoms:</Text>
+            <Text style={styles.subText}>KINGDOMS</Text>
+          </Animated.View>
+        </View>
         <Animated.Text style={[styles.tapText, { opacity: buttonOpacity }]}>Tap TO START.</Animated.Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -124,17 +118,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Michroma-Regular',
   },
-  tapButton: {
-    position: 'absolute',
-    bottom: 50,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
   tapText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
     fontFamily: 'Michroma-Regular',
+    position: 'absolute',
+    bottom: 50,
   },
 });
 

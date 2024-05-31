@@ -2,6 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, Animated } from 'react-native';
 import Modal from 'react-native-modal';
+import SettingsButton from '../components/SettingsButton';
 
 const { height: windowHeight } = Dimensions.get('window');
 
@@ -151,12 +152,12 @@ const Episode = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.iconsContainer}>
+      {/* <View style={styles.iconsContainer}>
       <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
             <Image style={styles.icon} source={require('../assets/Setting.png')} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
                   {/* <Image style={styles.icon} source={require('../assets/slider.png')} /> */}
-      </View>
+      {/* </View> */}
       <View style={styles.contentContainer}>
         <Animated.View style={[styles.header, { transform: [{ scale: headerScale }] }]}>
           <Text style={styles.headerText}>Monarch's Ascension Heralds New Era for the Kingdom</Text>
@@ -185,6 +186,9 @@ const Episode = ({ navigation, route }) => {
           {renderModalContent()}
         </View>
       </Modal>
+      <View style={styles.iconsContainer}>
+        <SettingsButton />
+      </View>
     </View>
   );
 };

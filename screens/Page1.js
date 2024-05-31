@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Animated, PanResponder, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import Cards from '../components/Cards';
+import SettingsButton from '../components/SettingsButton';
 
 const getImageSource = (activeButton) => {
   switch (activeButton) {
@@ -126,10 +127,10 @@ const Page1 = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.iconsContainer}>
+      {/* <View style={styles.iconsContainer}>
         <Image style={styles.icon} source={require('../assets/Setting.png')} />
         <Image style={styles.icon} source={require('../assets/slider.png')} />
-      </View>
+      </View> */}
       <View style={styles.buttonsContainer}>
         {['M', 'R', 'E', 'S'].map((label) => (
           <View key={label} style={styles.buttonContainer}>
@@ -167,6 +168,9 @@ const Page1 = ({ navigation, route }) => {
           </Animated.View>
         );
       }).reverse()}
+      <View style={styles.iconsContainer}>
+        <SettingsButton/>
+      </View>
     </View>
   );
 };
