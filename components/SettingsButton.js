@@ -2,9 +2,8 @@
 import React, { useState, useRef } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import LottieView from 'lottie-react-native';
-import Settings from '../components/Settings'; // Ensure this path is correct
 
-const SettingsButton = ({ windowWidth, windowHeight }) => {
+const SettingsButton = () => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const animationRef = useRef(null);
   const overlayOpacity = useRef(new Animated.Value(0)).current;
