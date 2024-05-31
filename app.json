@@ -22,6 +22,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "fonts": {
+      "customFont": {
+        "asset": "./assets/fonts/Jacquard 24 Charted.ttf"
+      }
     }
   }
 }

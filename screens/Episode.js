@@ -1,13 +1,67 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, Animated } from 'react-native';
 import Modal from 'react-native-modal';
 
 const { height: windowHeight } = Dimensions.get('window');
 
-const Episode = ({ navigation }) => {
+const Episode = ({ navigation, route }) => {
   const [activeButton, setActiveButton] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [shouldRunAnimation, setShouldRunAnimation] = useState(true);
+
+  const headerScale = useRef(new Animated.Value(0)).current;
+  const newsScales = Array.from({ length: 4 }).map(() => useRef(new Animated.Value(0)).current);
+  const hasAnimated = useRef(false);
+  const alreadyAnimated = useRef(false);
+
+  const runAnimation = useCallback(() => {
+    Animated.stagger(200, [
+      Animated.spring(headerScale, {
+        toValue: 1,
+        useNativeDriver: true,
+        friction: 5,
+        tension: 10,
+      }),
+      ...newsScales.map(scale =>
+        Animated.spring(scale, {
+          toValue: 1,
+          useNativeDriver: true,
+          friction: 5,
+          tension: 10,
+        })
+      ),
+    ]).start();
+  }, [headerScale, newsScales]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!shouldRunAnimation) {
+        return;
+      } else {
+        setActiveButton(null);
+
+        if (!alreadyAnimated.current) {
+          headerScale.setValue(0);
+          newsScales.forEach(scale => scale.setValue(0));
+          hasAnimated.current = false;
+        } else {
+          alreadyAnimated.current = false;
+        }
+        if (!hasAnimated.current) {
+          runAnimation();
+          hasAnimated.current = true;
+          alreadyAnimated.current = false;
+        }
+      }
+    }, [shouldRunAnimation, runAnimation, headerScale, newsScales])
+  );
+
+  const handleModalClose = () => {
+    alreadyAnimated.current = true;
+    setShouldRunAnimation(true);
+  }
 
   const handlePress = (button) => {
     setActiveButton(button);
@@ -15,6 +69,7 @@ const Episode = ({ navigation }) => {
   };
 
   const handleLongPressIn = (button) => {
+    setShouldRunAnimation(false);
     setModalContent(button);
     setActiveButton(button);
     setIsModalVisible(true);
@@ -97,124 +152,39 @@ const Episode = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconsContainer}>
-        <Image style={styles.icon} source={require('../assets/setting.png')} />
-        <Image style={styles.icon} source={require('../assets/slider.png')} />
+      <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+            <Image style={styles.icon} source={require('../assets/Setting.png')} />
+          </TouchableOpacity>
+                  {/* <Image style={styles.icon} source={require('../assets/slider.png')} /> */}
       </View>
       <View style={styles.contentContainer}>
-        <View style={styles.header}>
+        <Animated.View style={[styles.header, { transform: [{ scale: headerScale }] }]}>
           <Text style={styles.headerText}>Monarch's Ascension Heralds New Era for the Kingdom</Text>
-        </View>
+        </Animated.View>
         <View style={styles.newsContainer}>
-          <Text style={styles.newsText}>Treasury Concerns Loom Over Upcoming Coronation</Text>
-          <Text style={styles.newsText}>Rising Tensions with Neighboring Kingdoms</Text>
-          <Text style={styles.newsText}>Calls for Social Reforms Echo Throughout the Kingdom</Text>
-          <Text style={styles.newsText}>Internal Dissent Casts Shadow on Coronation Festivities</Text>
+          {['Treasury Concerns Loom Over Upcoming Coronation', 'Rising Tensions with Neighboring Kingdoms', 'Calls for Social Reforms Echo Throughout the Kingdom', 'Internal Dissent Casts Shadow on Coronation Festivities'].map((text, index) => (
+            <Animated.View key={index} style={[styles.newsContainer, { transform: [{ scale: newsScales[index] }] }]}>
+              <Text style={styles.newsText}>{text}</Text>
+            </Animated.View>
+          ))}
         </View>
       </View>
       <View style={styles.buttonsContainer}>
         {['M', 'R', 'E', 'S'].map(renderButton)}
       </View>
-
-      {/* Modal */}
-      {/* <Modal
+      <Modal
         isVisible={isModalVisible && modalContent !== null}
         backdropOpacity={0.5}
         onBackdropPress={() => setIsModalVisible(false)}
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
+        onModalHide={() => handleModalClose()}
+        animationIn="zoomIn"
+        animationOut="zoomOut"
         style={styles.modal}
       >
         <View style={styles.innerModalContainer}>
           {renderModalContent()}
         </View>
-      </Modal> */}
-
-
-      {/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="slideInDown"
-  animationOut="slideOutUp"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-
-
-</Modal> */}
-{/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="bounceIn"
-  animationOut="bounceOut"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal> */}
-
-
-<Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="bounceIn"
-  animationOut="bounceOut"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal>
-
-{/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="flipInX"
-  animationOut="flipOutX"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal> */}
-
-
-<Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="zoomIn"
-  animationOut="zoomOut"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal> 
-
-{/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="slideInLeft"
-  animationOut="slideOutRight"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal> */}
-
-
-
-
-
+      </Modal>
     </View>
   );
 };
@@ -228,7 +198,7 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     width: '90%',
     position: 'absolute',
     top: 50,
@@ -258,8 +228,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   newsContainer: {
-    width: '80%',
+    width: '90%',
     marginBottom: 20,
+    alignSelf: 'center',
   },
   newsText: {
     padding: 10,

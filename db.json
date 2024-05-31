@@ -1,0 +1,94 @@
+{
+    "episode": 1,
+    "cards": [
+      {
+        "agent": "Religious Leader",
+        "content": "The Religious Leader proposes a new festival to unite the people. Do you approve?",
+        "choices": {
+          "left": {
+            "text": "Approve the festival",
+            "impact": {
+              "religion": 10,
+              "society": 5,
+              "economics": -5
+            }
+          },
+          "right": {
+            "text": "Decline the festival",
+            "impact": {
+              "religion": -10,
+              "society": -5,
+              "economics": 5
+            }
+          }
+        }
+      },
+      {
+        "agent": "Military Leader",
+        "content": "The Military Leader requests more funding for defense. Do you grant it?",
+        "choices": {
+          "left": {
+            "text": "Grant more funding",
+            "impact": {
+              "military": 10,
+              "economics": -10
+            }
+          },
+          "right": {
+            "text": "Deny the request",
+            "impact": {
+              "military": -10,
+              "economics": 10
+            }
+          }
+        }
+      },
+      {
+        "agent": "Society Leader",
+        "content": "The Society Leader wants to implement new education reforms. Do you support this?",
+        "choices": {
+          "left": {
+            "text": "Support the reforms",
+            "impact": {
+              "society": 10,
+              "economics": -5
+            }
+          },
+          "right": {
+            "text": "Oppose the reforms",
+            "impact": {
+              "society": -10,
+              "economics": 5
+            }
+          }
+        }
+      },
+      {
+        "agent": "Economics Leader",
+        "content": "The Economics Leader suggests increasing taxes to boost the economy. Do you agree?",
+        "choices": {
+          "left": {
+            "text": "Increase taxes",
+            "impact": {
+              "economics": 10,
+              "society": -5
+            }
+          },
+          "right": {
+            "text": "Keep taxes the same",
+            "impact": {
+              "economics": -10,
+              "society": 5
+            }
+          }
+        }
+      }
+    ],
+    "initial_stats": {
+      "military": 50,
+      "religion": 50,
+      "society": 50,
+      "economics": 50
+    }
+  }
+  
