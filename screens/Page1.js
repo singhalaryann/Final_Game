@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Animated, PanResponder, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import Cards from '../components/Cards';
-import Settings from '../components/Settings';
+import SettingsButton from '../components/SettingsButton';
 
 const getImageSource = (activeButton) => {
   switch (activeButton) {
@@ -23,7 +23,7 @@ const backImage = require('../assets/cardBack.png');
 const Page1 = ({ navigation, route }) => {
   const { activeButton } = route.params;
   const [currentButton, setCurrentButton] = useState(activeButton);
-  const [ cardsPlaced, setCardsPlaced ] = useState(false);
+  const [cardsPlaced, setCardsPlaced] = useState(false);
 
   const remainingCards = ['M', 'R', 'E', 'S'].filter(button => button !== activeButton);
 
@@ -62,7 +62,7 @@ const Page1 = ({ navigation, route }) => {
             // Add a delay for other cards
             setTimeout(() => {
               flipAnims[index].setValue(1);
-              if(index >= 3) {
+              if (index >= 3) {
                 setCardsPlaced(true);
               }
             }, staggerDelay * 2 * index); // Apply staggered delay
@@ -74,7 +74,7 @@ const Page1 = ({ navigation, route }) => {
     return () => {
       initialData.forEach((_, index) => clearTimeout(index));
     };
-  }, [ cardsPlaced ]);
+  }, [cardsPlaced]);
 
 
 
@@ -127,10 +127,6 @@ const Page1 = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.iconsContainer}>
-        <Image style={styles.icon} source={require('../assets/Setting.png')} />
-        <Image style={styles.icon} source={require('../assets/slider.png')} />
-      </View>
       <View style={styles.buttonsContainer}>
         {['M', 'R', 'E', 'S'].map((label) => (
           <View key={label} style={styles.buttonContainer}>
@@ -168,6 +164,9 @@ const Page1 = ({ navigation, route }) => {
           </Animated.View>
         );
       }).reverse()}
+      <View style={styles.iconsContainer}>
+        <SettingsButton />
+      </View>
     </View>
   );
 };
@@ -178,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingTop: 100, // Added padding to ensure the card doesn't cover the top text
+    paddingTop: 100, // Added padding to ensure the card doesn't cover the top text
   },
   iconsContainer: {
     flexDirection: 'row',
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     position: 'absolute',
-    top: 60,  // Increased top value to provide more space for the text above
+    top: 400,  // Increased top value to provide more space for the text above
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'

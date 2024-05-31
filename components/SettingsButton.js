@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import LottieView from 'lottie-react-native';
+import Setting from '../screens/Setting'; 
 
 const SettingsButton = () => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
@@ -48,7 +49,7 @@ const SettingsButton = () => {
       {isOverlayVisible && (
         <Animated.View style={[styles.overlay, { opacity: overlayOpacity }]}>
           <View style={styles.settingsContainer}>
-            <Settings />
+            <Setting />
           </View>
         </Animated.View>
       )}
@@ -73,14 +74,12 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: 'absolute',
-    top: '200%', // 40% from the top
-    left: '15%', // 20% from the left
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
+    top: '200%',
+    alignSelf: 'center',
+    backfaceVisibility: 'hidden',
   },
   settingsContainer: {
-    width: '90%',
-    backgroundColor: 'white',
+    width: '100%',
     padding: 20,
     borderRadius: 10,
   },

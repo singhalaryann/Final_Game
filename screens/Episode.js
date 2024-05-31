@@ -153,7 +153,7 @@ const Episode = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconsContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+    {/*<TouchableOpacity onPress={() => navigation.navigate('Setting')}>
             <Image style={styles.icon} source={require('../assets/Setting.png')} />
           </TouchableOpacity>
                   {/* <Image style={styles.icon} source={require('../assets/slider.png')} /> */}
@@ -173,7 +173,6 @@ const Episode = ({ navigation, route }) => {
       <View style={styles.buttonsContainer}>
         {['M', 'R', 'E', 'S'].map(renderButton)}
       </View>
-<<<<<<< HEAD
       <View style={styles.iconsContainer}>
         <SettingsButton windowHeight={windowHeight} windowWidth={windowWidth} />
       </View>

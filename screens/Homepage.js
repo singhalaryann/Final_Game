@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity, ImageBackground, Animated } from "react-native";
+import SettingsButton from "../components/SettingsButton";
 
 const Homepage = ({ navigation }) => {
   const buttonScale = new Animated.Value(1);
@@ -29,14 +30,6 @@ const Homepage = ({ navigation }) => {
     >
       <View style={styles.overlay} />
       <View style={styles.homepage}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
-            <Image style={styles.settingImage} source={require('../assets/Setting.png')} />
-          </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => navigation.navigate('StorybookPage')}>
-            <Image style={styles.bookImage} source={require('../assets/book.png')} />
-          </TouchableOpacity> */}
-        </View>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Welcome to The Kingdom</Text>
         </View>
@@ -71,6 +64,9 @@ const Homepage = ({ navigation }) => {
               <Text style={styles.buttonText}>Help</Text>
             </TouchableOpacity>
           </Animated.View>
+        </View>
+        <View style={styles.headerContainer}>
+          <SettingsButton />
         </View>
       </View>
     </ImageBackground>
