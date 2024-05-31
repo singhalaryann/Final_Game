@@ -128,7 +128,7 @@ const Page1 = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconsContainer}>
-        <Image style={styles.icon} source={require('../assets/setting.png')} />
+        <Image style={styles.icon} source={require('../assets/Setting.png')} />
         <Image style={styles.icon} source={require('../assets/slider.png')} />
       </View>
       <View style={styles.buttonsContainer}>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 100, // Added padding to ensure the card doesn't cover the top text
+    // paddingTop: 100, // Added padding to ensure the card doesn't cover the top text
   },
   iconsContainer: {
     flexDirection: 'row',
@@ -228,6 +228,7 @@ const styles = StyleSheet.create({
     top: 60,  // Increased top value to provide more space for the text above
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center'
   },
 });
 

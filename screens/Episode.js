@@ -152,6 +152,12 @@ const Episode = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.iconsContainer}>
+      <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+            <Image style={styles.icon} source={require('../assets/Setting.png')} />
+          </TouchableOpacity>
+                  {/* <Image style={styles.icon} source={require('../assets/slider.png')} /> */}
+      </View>
       <View style={styles.contentContainer}>
         <Animated.View style={[styles.header, { transform: [{ scale: headerScale }] }]}>
           <Text style={styles.headerText}>Monarch's Ascension Heralds New Era for the Kingdom</Text>
@@ -167,79 +173,10 @@ const Episode = ({ navigation, route }) => {
       <View style={styles.buttonsContainer}>
         {['M', 'R', 'E', 'S'].map(renderButton)}
       </View>
+<<<<<<< HEAD
       <View style={styles.iconsContainer}>
         <SettingsButton windowHeight={windowHeight} windowWidth={windowWidth} />
       </View>
-
-      {/* Modal */}
-      {/* <Modal
-        isVisible={isModalVisible && modalContent !== null}
-        backdropOpacity={0.5}
-        onBackdropPress={() => setIsModalVisible(false)}
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
-        style={styles.modal}
-      >
-        <View style={styles.innerModalContainer}>
-          {renderModalContent()}
-        </View>
-      </Modal> */}
-
-
-      {/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="slideInDown"
-  animationOut="slideOutUp"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-
-
-</Modal> */}
-      {/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="bounceIn"
-  animationOut="bounceOut"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal> */}
-
-
-      {/*<Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="bounceIn"
-  animationOut="bounceOut"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal>*/}
-
-      {/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="flipInX"
-  animationOut="flipOutX"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal> */}
-
 
       <Modal
         isVisible={isModalVisible && modalContent !== null}
@@ -254,24 +191,6 @@ const Episode = ({ navigation, route }) => {
           {renderModalContent()}
         </View>
       </Modal>
-
-      {/* <Modal
-  isVisible={isModalVisible && modalContent !== null}
-  backdropOpacity={0.5}
-  onBackdropPress={() => setIsModalVisible(false)}
-  animationIn="slideInLeft"
-  animationOut="slideOutRight"
-  style={styles.modal}
->
-  <View style={styles.innerModalContainer}>
-    {renderModalContent()}
-  </View>
-</Modal> */}
-
-
-
-
-
     </View>
   );
 };
@@ -285,7 +204,7 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     width: '90%',
     position: 'absolute',
     top: 50,
