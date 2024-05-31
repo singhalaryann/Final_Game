@@ -2,8 +2,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, Animated } from 'react-native';
 import Modal from 'react-native-modal';
+import SettingsButton from '../components/SettingsButton';
 
-const { height: windowHeight } = Dimensions.get('window');
+const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
 
 const Episode = ({ navigation, route }) => {
   const [activeButton, setActiveButton] = useState(null);
@@ -151,10 +152,6 @@ const Episode = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.iconsContainer}>
-        <Image style={styles.icon} source={require('../assets/setting.png')} />
-        <Image style={styles.icon} source={require('../assets/slider.png')} />
-      </View>
       <View style={styles.contentContainer}>
         <Animated.View style={[styles.header, { transform: [{ scale: headerScale }] }]}>
           <Text style={styles.headerText}>Monarch's Ascension Heralds New Era for the Kingdom</Text>
@@ -169,6 +166,9 @@ const Episode = ({ navigation, route }) => {
       </View>
       <View style={styles.buttonsContainer}>
         {['M', 'R', 'E', 'S'].map(renderButton)}
+      </View>
+      <View style={styles.iconsContainer}>
+        <SettingsButton windowHeight={windowHeight} windowWidth={windowWidth} />
       </View>
 
       {/* Modal */}

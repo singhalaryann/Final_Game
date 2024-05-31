@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Animated, PanResponder, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import Cards from '../components/Cards';
+import Settings from '../components/Settings';
 
 const getImageSource = (activeButton) => {
   switch (activeButton) {
