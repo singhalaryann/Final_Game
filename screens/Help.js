@@ -59,7 +59,7 @@ const Help = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#121212',
     paddingTop: 50,
     paddingHorizontal: 20,
   },
@@ -69,28 +69,32 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'Michroma-Regular',
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     marginTop: 20,
     marginBottom: 10,
+    fontFamily: 'Michroma-Regular',
   },
   subSectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     marginTop: 10,
     marginBottom: 5,
+    fontFamily: 'Michroma-Regular',
   },
   text: {
     fontSize: 16,
-    color: 'black',
+    color: 'white',
     lineHeight: 24,
+    fontFamily: 'Michroma-Regular',
   },
   backButton: {
     position: 'absolute',
@@ -106,6 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
+    fontFamily: 'Michroma-Regular',
   },
 });
 

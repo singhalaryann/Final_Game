@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView } from "react-native";
 
 const MainScreen = ({ navigation }) => {
@@ -7,9 +7,7 @@ const MainScreen = ({ navigation }) => {
       <Image style={styles.homepage} source={require('../assets/HP.png')} />
       <View style={styles.overlay}>
         <View style={styles.topSection}>
-          <Text style={styles.timelessTravelsBegin}>
-            Timeless Travels
-          </Text>
+          <Text style={styles.timelessTravelsBegin}>Timeless Travels</Text>
           <Text style={styles.getmoredone}>Get More Done</Text>
         </View>
         <View style={styles.bottomSection}>
@@ -31,7 +29,7 @@ const MainScreen = ({ navigation }) => {
             <View style={styles.line}></View>
             <View style={styles.line}></View>
 
-            <TouchableOpacity style={styles.socialButton} onPress={() => console.log("Sign in with Google pressed")}>
+            <TouchableOpacity style={styles.socialButton} onPress={() => console.log("Sign up with Google pressed")}>
               <Image source={require("../assets/google.png")} style={styles.socialIcon} />
               <Text style={styles.socialText}>Sign up with Google</Text>
             </TouchableOpacity>
@@ -50,6 +48,7 @@ const MainScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    backgroundColor: '#121212',
   },
   homepage: {
     position: 'absolute',
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
     width: '100%',
     height: '100%',
     justifyContent: 'center',
@@ -68,35 +67,35 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // marginTop: 80,
   },
   bottomSection: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    marginTop: 100,
-
+    paddingTop: 50,
   },
   timelessTravelsBegin: {
     textAlign: "center",
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
-    textShadowColor: 'white',
+    color: 'white',
+    textShadowColor: '#FF6F61',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 5,
-    color: 'white',
     paddingHorizontal: 10,
+    fontFamily: 'Michroma-Regular',
   },
   getmoredone: {
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: 'lightgrey',
     textShadowColor: 'black',
     textShadowOffset: { width: 1, height: 2 },
     textShadowRadius: 3,
     marginTop: 10,
+    fontFamily: 'Michroma-Regular',
   },
   buttonContainer: {
     alignItems: 'center',
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
     width: '90%',
     paddingVertical: 15,
     borderRadius: 30,
-    backgroundColor: 'tomato',
+    backgroundColor: '#FF6F61',
     marginBottom: 20,
     elevation: 5,
   },
@@ -116,6 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
+    fontFamily: 'Michroma-Regular',
   },
   signinContainer: {
     flexDirection: 'row',
@@ -125,13 +125,15 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: 'lightgrey',
+    fontFamily: 'Michroma-Regular',
   },
   signin: {
     fontSize: 16,
-    color: 'tomato',
+    color: '#FF6F61',
     fontWeight: 'bold',
     marginLeft: 7,
     textDecorationLine: 'underline',
+    fontFamily: 'Michroma-Regular',
   },
   orContainer: {
     marginBottom: 8,
@@ -140,6 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'lightgrey',
     fontWeight: 'bold',
+    fontFamily: 'Michroma-Regular',
   },
   line: {
     width: '90%',
@@ -167,6 +170,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontSize: 16,
+    // fontFamily: 'Michroma-Regular',
   },
 });
 

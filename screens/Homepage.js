@@ -95,9 +95,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    // paddingHorizontal: 250,
-    // paddingTop: 30,
-    margin: 20
+    margin: 20,
   },
   settingImage: {
     width: 40,
@@ -117,6 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
+    fontFamily: 'Michroma-Regular',
   },
   buttonContainer: {
     alignItems: 'center',
@@ -146,6 +145,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'lightgrey',
     textAlign: 'center',
+    fontFamily: 'Michroma-Regular',
   },
 });
 

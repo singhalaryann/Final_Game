@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+import CheckBox from 'expo-checkbox';
 
 const Signup = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -38,11 +38,11 @@ const Signup = ({ navigation }) => {
                 </View>
 
                 <View style={styles.checkboxContainer}>
-                    {/* <CheckBox
+                    <CheckBox
                         value={isSelected}
                         onValueChange={setSelection}
-                        tintColors={{ true: '#00bfff', false: 'black' }}
-                    /> */}
+                        color={isSelected ? '#FF6F61' : undefined}
+                    />
                     <Text style={styles.checkboxText}>
                         I agree to all statements in{" "}
                         <Text style={styles.termsOfService} onPress={() => console.log("Terms of Service clicked")}>Terms of Service</Text>
@@ -53,7 +53,7 @@ const Signup = ({ navigation }) => {
                     <TouchableOpacity style={styles.signupButton} onPress={() => console.log("Sign Up")}>
                         <Text style={styles.signupButtonText}>SIGN UP</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.signinButton} onPress={() => navigation.navigate('HomePage')}>
+                    <TouchableOpacity style={styles.signinButton} onPress={() => navigation.navigate('SigninPage')}>
                         <Text style={styles.signinButtonText}>SIGN IN</Text>
                     </TouchableOpacity>
                 </View>
@@ -65,12 +65,12 @@ const Signup = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
         justifyContent: 'center',
         alignItems: 'center',
     },
     signupPage: {
-        backgroundColor: 'white',
+        backgroundColor: '#1E1E1E',
         padding: 20,
         borderRadius: 20,
         width: "85%",
@@ -83,9 +83,10 @@ const styles = StyleSheet.create({
     signUp: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: 'black',
+        color: 'white',
         textAlign: 'center',
         marginBottom: 20,
+        fontFamily: 'Michroma-Regular',
     },
     inputContainer: {
         marginBottom: 20,
@@ -94,9 +95,9 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         borderRadius: 10,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: '#333',
         marginBottom: 15,
-        color: 'black',
+        color: 'white',
     },
     checkboxContainer: {
         flexDirection: 'row',
@@ -105,11 +106,12 @@ const styles = StyleSheet.create({
     },
     checkboxText: {
         marginLeft: 10,
-        color: 'black',
+        color: 'white',
+        fontFamily: 'Michroma-Regular',
     },
     termsOfService: {
         textDecorationLine: 'underline',
-        color: 'blue',
+        color: '#FF6F61',
     },
     buttonWrapper: {
         flexDirection: 'row',
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
     },
     signupButton: {
         alignItems: 'center',
-        backgroundColor: 'tomato',
+        backgroundColor: '#FF6F61',
         paddingVertical: 15,
         borderRadius: 30,
         width: '45%',
@@ -126,10 +128,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16,
+        fontFamily: 'Michroma-Regular',
     },
     signinButton: {
         alignItems: 'center',
-        backgroundColor: 'dodgerblue',
+        backgroundColor: '#4A90E2',
         paddingVertical: 15,
         borderRadius: 30,
         width: '45%',
@@ -138,6 +141,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16,
+        fontFamily: 'Michroma-Regular',
     },
 });
 

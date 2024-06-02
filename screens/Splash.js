@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useFonts } from 'expo-font';
+
 const { width } = Dimensions.get('window');
 
 const Splash = ({ navigation }) => {
@@ -14,16 +15,14 @@ const Splash = ({ navigation }) => {
   const buttonOpacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Rotate the image continuously and slowly
     Animated.loop(
       Animated.timing(rotateAnim, {
         toValue: 1,
-        duration: 50000, // Adjust this value for slower continuous rotation
+        duration: 50000,
         useNativeDriver: true,
       })
     ).start();
 
-    // Sequential animations
     Animated.sequence([
       Animated.timing(textOpacity, {
         toValue: 1,
@@ -42,7 +41,6 @@ const Splash = ({ navigation }) => {
       }),
     ]).start();
 
-    // Blink animation for "TAP TO START" button
     Animated.loop(
       Animated.sequence([
         Animated.timing(buttonOpacity, {
@@ -63,6 +61,10 @@ const Splash = ({ navigation }) => {
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
   });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => navigation.navigate('MainScreen', { screen: 'MainScreen' })}>
