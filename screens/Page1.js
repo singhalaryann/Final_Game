@@ -133,9 +133,6 @@ const Page1 = ({ navigation, route }) => {
     }
     currIndex.current = currIndex.current + 1;
 
-    console.log(currIndex.current);
-    FlipNextCard(currIndex.current);
-
     setData((prevState) => {
       if (prevState.length > 1) {
         const nextCard = prevState[1].title.split(' ')[0].charAt(0);

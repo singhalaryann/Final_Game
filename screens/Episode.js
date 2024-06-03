@@ -48,7 +48,6 @@ const Episode = ({ navigation, route }) => {
     // }
     const data = require('../db.json').episodes[0];
     setEpisodeData(data);
-    console.log("Fetched data");
   };
   
   useFocusEffect(
