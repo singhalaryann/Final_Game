@@ -18,18 +18,18 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
+      <Stack.Navigator initialRouteName="Splash" screenOptions={{ presentation: "transparentModal" }}>
         <Stack.Screen
           name="Splash"
           component={Splash}
           options={{ headerShown: false }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="MainScreen"
           component={MainScreen}
           options={{ headerShown: false }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="SignupPage"
           component={SignupPage}
           options={{ headerShown: false }}
@@ -42,19 +42,19 @@ const App = () => {
         <Stack.Screen
           name="Ep1"
           component={Episode}
-          options={{headerShown: false }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Setting"
           component={Setting}
-          options={{headerShown: false }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Page1"
           component={Page1}
-          options={{headerShown: false }}
+          options={{ headerShown: false }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="HomePage"
           component={Homepage}
           options={{ headerShown: false }}

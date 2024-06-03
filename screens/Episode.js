@@ -7,6 +7,7 @@ import SettingsButton from '../components/SettingsButton';
 const { height: windowHeight } = Dimensions.get('window');
 
 const Episode = ({ navigation, route }) => {
+  const [episodeData, setEpisodeData] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState(null);
@@ -36,6 +37,20 @@ const Episode = ({ navigation, route }) => {
     ]).start();
   }, [headerScale, newsScales]);
 
+  const readData = async () => {
+    // try {
+    //   const response = await fetch('path/to/your/file.json');
+    //   const json = await response.json();
+    //   setEpisodeData(json);
+    //   console.log(episodeData)
+    // } catch (error) {
+    //   console.error('Error reading JSON file:', error);
+    // }
+    const data = require('../db.json').episodes[0];
+    setEpisodeData(data);
+    console.log("Fetched data");
+  };
+  
   useFocusEffect(
     useCallback(() => {
       if (!shouldRunAnimation) {
@@ -52,6 +67,7 @@ const Episode = ({ navigation, route }) => {
         }
         if (!hasAnimated.current) {
           runAnimation();
+          readData();
           hasAnimated.current = true;
           alreadyAnimated.current = false;
         }
@@ -114,6 +130,7 @@ const Episode = ({ navigation, route }) => {
             <Text style={styles.modalTitle}>Religious Leader</Text>
             <Image style={styles.modalImage} source={require('../assets/RL.png')} />
             <Text style={styles.modalText}>Guidance and spiritual leadership for the kingdom.</Text>
+            <Text style={styles.modalText}>Current Stats: {episodeData?.initial_stats.religion}.</Text>
           </>
         );
         break;
@@ -123,6 +140,7 @@ const Episode = ({ navigation, route }) => {
             <Text style={styles.modalTitle}>Society Leader</Text>
             <Image style={styles.modalImage} source={require('../assets/SL.png')} />
             <Text style={styles.modalText}>Responsible for social welfare and community well-being.</Text>
+            <Text style={styles.modalText}>Current Stats: {episodeData?.initial_stats.society}.</Text>
           </>
         );
         break;
@@ -132,6 +150,7 @@ const Episode = ({ navigation, route }) => {
             <Text style={styles.modalTitle}>Economy Leader</Text>
             <Image style={styles.modalImage} source={require('../assets/EL.png')} />
             <Text style={styles.modalText}>Manages economic policies and financial stability.</Text>
+            <Text style={styles.modalText}>Current Stats: {episodeData?.initial_stats.society}.</Text>
           </>
         );
         break;
@@ -141,6 +160,7 @@ const Episode = ({ navigation, route }) => {
             <Text style={styles.modalTitle}>Military Leader</Text>
             <Image style={styles.modalImage} source={require('../assets/MLL.png')} />
             <Text style={styles.modalText}>Manages military stability.</Text>
+            <Text style={styles.modalText}>Current Stats: {episodeData?.initial_stats.economics}.</Text>
           </>
         );
         break;
@@ -152,18 +172,19 @@ const Episode = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.iconsContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
-            <Image style={styles.icon} source={require('../assets/Setting.png')} />
-          </TouchableOpacity> */}
-                  {/* <Image style={styles.icon} source={require('../assets/slider.png')} /> */}
-      {/* </View> */}
       <View style={styles.contentContainer}>
         <Animated.View style={[styles.header, { transform: [{ scale: headerScale }] }]}>
-          <Text style={styles.headerText}>Monarch's Ascension Heralds New Era for the Kingdom</Text>
+          <Text style={styles.headerText}>
+            {episodeData?.main_country_state}
+          </Text>
         </Animated.View>
         <View style={styles.newsContainer}>
-          {['Treasury Concerns Loom Over Upcoming Coronation', 'Rising Tensions with Neighboring Kingdoms', 'Calls for Social Reforms Echo Throughout the Kingdom', 'Internal Dissent Casts Shadow on Coronation Festivities'].map((text, index) => (
+          {[
+            episodeData?.current_activities.military,
+            episodeData?.current_activities.religion,
+            episodeData?.current_activities.society,
+            episodeData?.current_activities.economics
+          ].map((text, index) => (
             <Animated.View key={index} style={[styles.newsContainer, { transform: [{ scale: newsScales[index] }] }]}>
               <Text style={styles.newsText}>{text}</Text>
             </Animated.View>
@@ -272,6 +293,7 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
+    bottom: 60,
   },
   innerModalContainer: {
     backgroundColor: '#d3d3d3',

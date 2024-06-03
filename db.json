@@ -1,94 +1,224 @@
 {
-    "episode": 1,
-    "cards": [
-      {
-        "agent": "Religious Leader",
-        "content": "The Religious Leader proposes a new festival to unite the people. Do you approve?",
-        "choices": {
-          "left": {
-            "text": "Approve the festival",
-            "impact": {
-              "religion": 10,
-              "society": 5,
-              "economics": -5
-            }
-          },
-          "right": {
-            "text": "Decline the festival",
-            "impact": {
-              "religion": -10,
-              "society": -5,
-              "economics": 5
-            }
-          }
-        }
+  "episodes": [
+    {
+      "episode": 1,
+      "main_country_state": "The kingdom of Aldoria is experiencing a period of relative stability, but tensions are rising in various sectors. The people are content, but there are murmurs of discontent that need to be addressed to maintain harmony.",
+      "current_activities": {
+        "military": "The military is conducting routine training exercises, but there are concerns about outdated equipment.",
+        "religion": "The church is planning a large pilgrimage, which is expected to attract many citizens.",
+        "society": "There is a growing movement for educational reform led by prominent societal figures.",
+        "economics": "The economy is stable but slow-growing, with discussions about potential tax reforms."
       },
-      {
-        "agent": "Military Leader",
-        "content": "The Military Leader requests more funding for defense. Do you grant it?",
-        "choices": {
-          "left": {
-            "text": "Grant more funding",
-            "impact": {
-              "military": 10,
-              "economics": -10
+      "cards": [
+        {
+          "agent": "Religious Leader",
+          "content": "The Religious Leader proposes a new festival to unite the people. Do you approve?",
+          "choices": {
+            "left": {
+              "text": "Approve the festival",
+              "impact": {
+                "religion": 10,
+                "society": 5,
+                "economics": -5
+              },
+              "outcome": "Religion and societal satisfaction rise, but economic resources are strained."
+            },
+            "right": {
+              "text": "Decline the festival",
+              "impact": {
+                "religion": -10,
+                "society": -5,
+                "economics": 5
+              },
+              "outcome": "Economic resources improve, but religion and societal satisfaction decrease."
             }
-          },
-          "right": {
-            "text": "Deny the request",
-            "impact": {
-              "military": -10,
-              "economics": 10
+          }
+        },
+        {
+          "agent": "Military Leader",
+          "content": "The Military Leader requests more funding for defense. Do you grant it?",
+          "choices": {
+            "left": {
+              "text": "Grant more funding",
+              "impact": {
+                "military": 10,
+                "economics": -10
+              },
+              "outcome": "Military strength increases, but economic resources are strained."
+            },
+            "right": {
+              "text": "Deny the request",
+              "impact": {
+                "military": -10,
+                "economics": 10
+              },
+              "outcome": "Economic resources improve, but military strength decreases."
+            }
+          }
+        },
+        {
+          "agent": "Society Leader",
+          "content": "The Society Leader wants to implement new education reforms. Do you support this?",
+          "choices": {
+            "left": {
+              "text": "Support the reforms",
+              "impact": {
+                "society": 10,
+                "economics": -5
+              },
+              "outcome": "Societal satisfaction rises, but economic resources are strained."
+            },
+            "right": {
+              "text": "Oppose the reforms",
+              "impact": {
+                "society": -10,
+                "economics": 5
+              },
+              "outcome": "Economic resources improve, but societal satisfaction decreases."
+            }
+          }
+        },
+        {
+          "agent": "Economics Leader",
+          "content": "The Economics Leader suggests increasing taxes to boost the economy. Do you agree?",
+          "choices": {
+            "left": {
+              "text": "Increase taxes",
+              "impact": {
+                "economics": 10,
+                "society": -5
+              },
+              "outcome": "Economic resources improve, but societal satisfaction decreases."
+            },
+            "right": {
+              "text": "Keep taxes the same",
+              "impact": {
+                "economics": -10,
+                "society": 5
+              },
+              "outcome": "Societal satisfaction rises, but economic resources are strained."
             }
           }
         }
-      },
-      {
-        "agent": "Society Leader",
-        "content": "The Society Leader wants to implement new education reforms. Do you support this?",
-        "choices": {
-          "left": {
-            "text": "Support the reforms",
-            "impact": {
-              "society": 10,
-              "economics": -5
-            }
-          },
-          "right": {
-            "text": "Oppose the reforms",
-            "impact": {
-              "society": -10,
-              "economics": 5
-            }
-          }
-        }
-      },
-      {
-        "agent": "Economics Leader",
-        "content": "The Economics Leader suggests increasing taxes to boost the economy. Do you agree?",
-        "choices": {
-          "left": {
-            "text": "Increase taxes",
-            "impact": {
-              "economics": 10,
-              "society": -5
-            }
-          },
-          "right": {
-            "text": "Keep taxes the same",
-            "impact": {
-              "economics": -10,
-              "society": 5
-            }
-          }
-        }
+      ],
+      "initial_stats": {
+        "military": 50,
+        "religion": 50,
+        "society": 50,
+        "economics": 50
       }
-    ],
-    "initial_stats": {
-      "military": 50,
-      "religion": 50,
-      "society": 50,
-      "economics": 50
+    },
+    {
+      "episode": 2,
+      "main_country_state": "The kingdom of Aldoria is now grappling with the aftermath of the previous decisions. Economic growth has either surged or slowed based on tax policies, and societal sentiments are either high or low depending on educational and religious decisions.",
+      "current_activities": {
+        "military": "New strategic alliances are being considered, requiring diplomatic finesse.",
+        "religion": "The church is planning an interfaith dialogue to promote peace among different religious communities.",
+        "society": "Social unrest is brewing in certain regions due to dissatisfaction with recent policies.",
+        "economics": "Trade negotiations with neighboring countries are underway, promising potential economic boosts."
+      },
+      "cards": [
+        {
+          "agent": "Religious Leader",
+          "content": "The Religious Leader seeks to launch a charity initiative to help the poor. Do you endorse it?",
+          "choices": {
+            "left": {
+              "text": "Endorse the initiative",
+              "impact": {
+                "religion": 10,
+                "society": 5,
+                "economics": -5
+              },
+              "outcome": "Religion and societal satisfaction rise, but economic resources are strained."
+            },
+            "right": {
+              "text": "Reject the initiative",
+              "impact": {
+                "religion": -10,
+                "society": -5,
+                "economics": 5
+              },
+              "outcome": "Economic resources improve, but religion and societal satisfaction decrease."
+            }
+          }
+        },
+        {
+          "agent": "Military Leader",
+          "content": "The Military Leader proposes a new alliance with a neighboring kingdom. Do you agree?",
+          "choices": {
+            "left": {
+              "text": "Form the alliance",
+              "impact": {
+                "military": 10,
+                "economics": 5,
+                "society": -5
+              },
+              "outcome": "Military strength and economic resources improve, but societal satisfaction decreases."
+            },
+            "right": {
+              "text": "Reject the alliance",
+              "impact": {
+                "military": -10,
+                "economics": -5,
+                "society": 5
+              },
+              "outcome": "Societal satisfaction improves, but military strength and economic resources decrease."
+            }
+          }
+        },
+        {
+          "agent": "Society Leader",
+          "content": "The Society Leader demands action on the growing social unrest. Do you implement new social policies?",
+          "choices": {
+            "left": {
+              "text": "Implement new policies",
+              "impact": {
+                "society": 10,
+                "economics": -5
+              },
+              "outcome": "Societal satisfaction rises, but economic resources are strained."
+            },
+            "right": {
+              "text": "Maintain current policies",
+              "impact": {
+                "society": -10,
+                "economics": 5
+              },
+              "outcome": "Economic resources improve, but societal satisfaction decreases."
+            }
+          }
+        },
+        {
+          "agent": "Economics Leader",
+          "content": "The Economics Leader suggests a major infrastructure project to stimulate the economy. Do you approve?",
+          "choices": {
+            "left": {
+              "text": "Approve the project",
+              "impact": {
+                "economics": 10,
+                "society": 5,
+                "military": -5
+              },
+              "outcome": "Economic resources and societal satisfaction improve, but military strength decreases."
+            },
+            "right": {
+              "text": "Reject the project",
+              "impact": {
+                "economics": -10,
+                "society": -5,
+                "military": 5
+              },
+              "outcome": "Military strength improves, but economic resources and societal satisfaction decrease."
+            }
+          }
+        }
+      ],
+      "initial_stats": {
+        "military": 50,
+        "religion": 50,
+        "society": 50,
+        "economics": 50
+      }
     }
-  }
-  
+  ]
+}

@@ -21,6 +21,7 @@ const getImageSource = (activeButton) => {
 const backImage = require('../assets/cardBack.png');
 
 const Page1 = ({ navigation, route }) => {
+  const [episodeData, setEpisodeData] = useState(null);
   const { activeButton } = route.params;
   const [currentButton, setCurrentButton] = useState(activeButton);
   const [ cardsPlaced, setCardsPlaced ] = useState(false);
@@ -92,7 +93,7 @@ const Page1 = ({ navigation, route }) => {
           toValue: { x: 600 * direction, y: dy },
           useNativeDriver: true,
           duration: 500,
-        }).start(removeCard);
+        }).start(() => removeCard(direction));
       } else {
         Animated.spring(swipe, {
           toValue: { x: 0, y: 0 },
@@ -103,7 +104,13 @@ const Page1 = ({ navigation, route }) => {
     },
   });
 
-  const removeCard = useCallback(() => {
+  const removeCard = useCallback((direction) => {
+    console.log(currentButton);
+    if(direction > 0) {
+      console.log("Choice: left");
+    } else {
+      console.log("Choice: right");
+    }
     setData((prevState) => {
       if (prevState.length > 1) {
         const nextCard = prevState[1].title.split(' ')[0].charAt(0);
@@ -123,7 +130,7 @@ const Page1 = ({ navigation, route }) => {
     if (data.length === 1) {
       navigation.navigate('Ep1', { animate: true });
     }
-  }, [data.length, navigation, swipe]);
+  }, [data.length, navigation, swipe, currentButton]);
 
   return (
     <View style={styles.container}>
@@ -156,6 +163,7 @@ const Page1 = ({ navigation, route }) => {
         const isFirst = index === 0;
         const dragHandlers = isFirst ? panResponder.panHandlers : {};
         const cardStyle = {
+          opacity: scales[index],
           transform: [
             { scale: scales[index] },
             ...(isFirst ? swipe.getTranslateTransform() : [])
