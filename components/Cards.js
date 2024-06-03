@@ -1,24 +1,34 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 
-const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
+const Cards = ({ items, backImage, isFirst, swipe, flipAnim, opacityAnim, ...rest }) => {
   const rotate = swipe.x.interpolate({
     inputRange: [-100, 0, 100],
     outputRange: ['-8deg', '0deg', '8deg'],
   });
 
-  const frontOpacity = flipAnim.interpolate({
+  const frontOpacityFirst = flipAnim.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [0, 0, 1],
   });
 
-  const backOpacity = flipAnim.interpolate({
+  const backOpacityFirst = flipAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1, 1, 0],
+  });
+
+  const frontOpacity = opacityAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0, 0, 1],
+  })
+
+  const backOpacity = opacityAnim.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [1, 1, 0],
   });
 
   const frontAnimatedStyle = {
-    opacity: frontOpacity,
+    opacity: isFirst ? frontOpacityFirst : frontOpacity,
     transform: [{
       rotateY: flipAnim.interpolate({
         inputRange: [0, 1],
@@ -28,7 +38,7 @@ const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
   };
 
   const backAnimatedStyle = {
-    opacity: backOpacity,
+    opacity: isFirst? backOpacityFirst : backOpacity,
     transform: [{
       rotateY: flipAnim.interpolate({
         inputRange: [0, 1],
