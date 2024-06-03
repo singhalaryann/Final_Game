@@ -19,19 +19,35 @@ const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
 
   const frontAnimatedStyle = {
     opacity: frontOpacity,
-    transform: [{ rotateY: flipAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['180deg', '360deg'],
-    }) }],
+    transform: [{
+      rotateY: flipAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['180deg', '360deg'],
+      })
+    }],
   };
 
   const backAnimatedStyle = {
     opacity: backOpacity,
-    transform: [{ rotateY: flipAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '180deg'],
-    }) }],
+    transform: [{
+      rotateY: flipAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '180deg'],
+      })
+    }],
   };
+
+  const choice1Opacity = swipe.x.interpolate({
+    inputRange: [0, 100],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+
+  const choice2Opacity = swipe.x.interpolate({
+    inputRange: [-100, 0],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
 
   return (
     <Animated.View
@@ -43,7 +59,15 @@ const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
       </Animated.View>
       <Animated.View style={[styles.cardInner, frontAnimatedStyle]}>
         <Image style={styles.cardImage} source={items.image} />
-        <Text style={styles.cardTitle}>{items.title}</Text>
+        <View style={styles.textContainer}>
+          <Animated.Text style={[styles.cardChoice, styles.cardChoice1, { opacity: choice1Opacity }]}>
+            {items.choiceL}
+          </Animated.Text>
+          <Animated.Text style={[styles.cardChoice, styles.cardChoice2, { opacity: choice2Opacity }]}>
+            {items.choiceR}
+          </Animated.Text>
+          <Text style={styles.cardTitle}>{items.title}</Text>
+        </View>
       </Animated.View>
     </Animated.View>
   );
@@ -63,6 +87,8 @@ const styles = StyleSheet.create({
     width: 350,
     height: 450,
     margin: 60,
+    borderWidth: 2,
+    backgroundColor: 'white',
   },
   cardInner: {
     backfaceVisibility: 'hidden',
@@ -79,13 +105,31 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 20,
   },
+  textContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 10,
+    right: 10,
+  },
   cardTitle: {
     fontSize: 28,
     color: 'white',
-    position: 'absolute',
-    bottom: 55,
-    left: 10,
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  cardChoice: {
+    position: 'absolute',
+    fontSize: 20,
+    color: 'red',
+    fontWeight: 'bold',
+  },
+  cardChoice1: {
+  bottom: 380,
+  left: 20,
+  },
+  cardChoice2: {
+    bottom: 380,
+    right: 20,
   },
 });
 

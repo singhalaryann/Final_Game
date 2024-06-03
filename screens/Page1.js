@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Animated, PanResponder, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import Cards from '../components/Cards';
 import SettingsButton from '../components/SettingsButton';
+// import CardsChoice from '../components/CardsChoice';
 
 const getImageSource = (activeButton) => {
   switch (activeButton) {
@@ -23,33 +24,41 @@ const backImage = require('../assets/cardBack.png');
 const Page1 = ({ navigation, route }) => {
   const { activeButton } = route.params;
   const [currentButton, setCurrentButton] = useState(activeButton);
-  const [ cardsPlaced, setCardsPlaced ] = useState(false);
+  const [cardsPlaced, setCardsPlaced] = useState(false);
 
   const remainingCards = ['M', 'R', 'E', 'S'].filter(button => button !== activeButton);
 
   const initialData = [
-    { image: getImageSource(activeButton), id: 1, title: `${activeButton} Leader`, about: 'Your chosen path begins here.' },
-    { image: getImageSource(remainingCards[0]), id: 2, title: `${remainingCards[0]} Leader`, about: 'This is an AI-generated card.' },
-    { image: getImageSource(remainingCards[1]), id: 3, title: `${remainingCards[1]} Leader`, about: 'This is another AI-generated card.' },
-    { image: getImageSource(remainingCards[2]), id: 4, title: `${remainingCards[2]} Leader`, about: 'This is yet another AI-generated card.' },
+    { image: getImageSource(activeButton), id: 1, title: `${activeButton} Leader`, question: "Do you want to proceed?", choiceL: "Choice 1", choiceR: "choice 2" },
+    { image: getImageSource(remainingCards[0]), id: 2, title: `${remainingCards[0]} Leader`,  question: "Is this the right choice?", choiceL: "Choice 1", choiceR: "choice 2" },
+    { image: getImageSource(remainingCards[1]), id: 3, title: `${remainingCards[1]} Leader`,  question: "Are you sure about this?", choiceL: "Choice 1", choiceR: "choice 2" },
+    { image: getImageSource(remainingCards[2]), id: 4, title: `${remainingCards[2]} Leader`,  question: "Will you take this path?", choiceL: "Choice 1", choiceR: "choice 2" },
   ];
 
   const [data, setData] = useState(initialData);
 
   const swipe = useRef(new Animated.ValueXY()).current;
   const scales = initialData.map(() => useRef(new Animated.Value(0)).current);
+  const positions = initialData.map(() => useRef(new Animated.ValueXY({ x: -500, y: -800 })).current);
   const flipAnims = initialData.map(() => useRef(new Animated.Value(0)).current);
 
   useEffect(() => {
     const staggerDelay = 200; // Delay between each card animation
     initialData.forEach((_, index) => {
       setTimeout(() => {
-        Animated.spring(scales[index], {
-          toValue: 1,
-          useNativeDriver: true,
-          friction: 5,
-          tension: 10,
-        }).start(() => {
+        Animated.parallel([
+          Animated.spring(positions[index], {
+            toValue: { x: 0, y: 0 },
+            useNativeDriver: true,
+            friction: 5,
+            tension: 10,
+          }),
+          Animated.spring(scales[index], {
+            toValue: 1,
+            useNativeDriver: true,
+            friction: 5,
+            tension: 10,
+          }),]).start(() => {
           // Start flip animation only for the first card
           if (index === 0) {
             Animated.spring(flipAnims[index], {
@@ -62,7 +71,7 @@ const Page1 = ({ navigation, route }) => {
             // Add a delay for other cards
             setTimeout(() => {
               flipAnims[index].setValue(1);
-              if(index >= 3) {
+              if (index >= 3) {
                 setCardsPlaced(true);
               }
             }, staggerDelay * 2 * index); // Apply staggered delay
@@ -74,9 +83,7 @@ const Page1 = ({ navigation, route }) => {
     return () => {
       initialData.forEach((_, index) => clearTimeout(index));
     };
-  }, [ cardsPlaced ]);
-
-
+  }, [cardsPlaced]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => cardsPlaced,
@@ -127,10 +134,6 @@ const Page1 = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.iconsContainer}>
-        <Image style={styles.icon} source={require('../assets/Setting.png')} />
-        <Image style={styles.icon} source={require('../assets/slider.png')} />
-      </View> */}
       <View style={styles.buttonsContainer}>
         {['M', 'R', 'E', 'S'].map((label) => (
           <View key={label} style={styles.buttonContainer}>
@@ -149,7 +152,7 @@ const Page1 = ({ navigation, route }) => {
       </View>
       {data.length > 0 && (
         <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitle}>{data[0].title}</Text>
+          <Text style={styles.cardTitle}>{data[0].question}</Text>
         </View>
       )}
       {data.map((item, index) => {
@@ -157,6 +160,8 @@ const Page1 = ({ navigation, route }) => {
         const dragHandlers = isFirst ? panResponder.panHandlers : {};
         const cardStyle = {
           transform: [
+            { translateX: positions[index].x },
+            { translateY: positions[index].y },
             { scale: scales[index] },
             ...(isFirst ? swipe.getTranslateTransform() : [])
           ],
@@ -169,7 +174,7 @@ const Page1 = ({ navigation, route }) => {
         );
       }).reverse()}
       <View style={styles.iconsContainer}>
-        <SettingsButton/>
+        <SettingsButton />
       </View>
     </View>
   );
@@ -181,7 +186,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingTop: 100, // Added padding to ensure the card doesn't cover the top text
   },
   iconsContainer: {
     flexDirection: 'row',
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
   },
   cardTitleContainer: {
     position: 'absolute',
-    top: 80,  // Adjusted to match the new card size
+    top: 200,
   },
   cardTitle: {
     fontSize: 25,
@@ -228,7 +232,6 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     position: 'absolute',
-    // top: 120,  // Increased top value to provide more space for the text above
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
