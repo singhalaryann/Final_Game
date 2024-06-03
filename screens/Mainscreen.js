@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView } from "react-native";
+import { Audio } from 'expo-av';
 
 const MainScreen = ({ navigation }) => {
+  const soundRef = useRef(null);
+
+  useEffect(() => {
+    const loadSound = async () => {
+      const { sound } = await Audio.Sound.createAsync(require('../assets/click-button.mp3'));
+      soundRef.current = sound;
+    };
+
+    loadSound();
+
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unloadAsync();
+      }
+    };
+  }, []);
+
+  const playSound = async () => {
+    if (soundRef.current) {
+      await soundRef.current.replayAsync();
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image style={styles.homepage} source={require('../assets/HP.png')} />
@@ -12,13 +36,24 @@ const MainScreen = ({ navigation }) => {
         </View>
         <View style={styles.bottomSection}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignupPage')}>
+            <TouchableOpacity 
+              style={styles.signupButton} 
+              onPress={async () => { 
+                await playSound(); 
+                navigation.navigate('SignupPage');
+              }}
+            >
               <Text style={styles.signupButtonText}>SIGN UP</Text>
             </TouchableOpacity>
 
             <View style={styles.signinContainer}>
               <Text style={styles.text}>Already have an account?</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('SigninPage')}>
+              <TouchableOpacity 
+                onPress={async () => { 
+                  await playSound(); 
+                  navigation.navigate('SigninPage');
+                }}
+              >
                 <Text style={styles.signin}>Sign In</Text>
               </TouchableOpacity>
             </View>
@@ -29,12 +64,24 @@ const MainScreen = ({ navigation }) => {
             <View style={styles.line}></View>
             <View style={styles.line}></View>
 
-            <TouchableOpacity style={styles.socialButton} onPress={() => console.log("Sign up with Google pressed")}>
+            <TouchableOpacity 
+              style={styles.socialButton} 
+              onPress={async () => { 
+                await playSound(); 
+                console.log("Sign up with Google pressed");
+              }}
+            >
               <Image source={require("../assets/google.png")} style={styles.socialIcon} />
               <Text style={styles.socialText}>Sign up with Google</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.socialButton} onPress={() => console.log("Sign up with Facebook pressed")}>
+            <TouchableOpacity 
+              style={styles.socialButton} 
+              onPress={async () => { 
+                await playSound(); 
+                console.log("Sign up with Facebook pressed");
+              }}
+            >
               <Image source={require("../assets/facebook.png")} style={styles.socialIcon} />
               <Text style={styles.socialText}>Sign up with Facebook</Text>
             </TouchableOpacity>

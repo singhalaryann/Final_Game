@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Audio } from 'expo-av'; // Import Audio from expo-av
 
 const { width } = Dimensions.get('window');
 
 const Levels = ({ navigation }) => {
+  const [sound, setSound] = useState(); // State for the sound
   const data = [
     { key: '1', image: require('../assets/L-1.png'), text: 'Palace', description: 'A magnificent palace with grand architecture.' },
     { key: '2', image: require('../assets/L-2.png'), text: 'House', description: 'A cozy house with a beautiful garden.' },
@@ -13,14 +15,50 @@ const Levels = ({ navigation }) => {
     { key: '5', image: require('../assets/MLL.png'), text: 'Cricket', description: 'A cricket stadium buzzing with excitement.' },
   ];
 
+  useEffect(() => {
+    // Load the sound file
+    const loadSound = async () => {
+      const { sound } = await Audio.Sound.createAsync(
+        require('../assets/click-button.mp3') // Adjust the path to your sound file
+      );
+      setSound(sound);
+    };
+
+    loadSound();
+
+    // Unload the sound when the component unmounts
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
+
+  const playSound = async () => {
+    if (sound) {
+      await sound.replayAsync();
+    }
+  };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.touchable}
       onPress={() => {
-        if (item.key === '1') {
-          navigation.navigate('Ep1');
+        playSound(); // Play the sound effect
+        // Navigate to different screens based on the item key
+        switch (item.key) {
+          case '1':
+            navigation.navigate('Ep1');
+            break;
+          case '2':
+            navigation.navigate('Ep2');
+            break;
+          // Add cases for other level items as needed
+          default:
+            break;
         }
       }}
+      activeOpacity={0.8}
     >
       <View style={styles.itemContainer}>
         <Image style={styles.image} source={item.image} />

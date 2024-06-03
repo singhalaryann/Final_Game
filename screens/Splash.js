@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useFonts } from 'expo-font';
+import { Audio } from 'expo-av';
 
 const { width } = Dimensions.get('window');
 
@@ -13,8 +14,16 @@ const Splash = ({ navigation }) => {
   const textOpacity = useRef(new Animated.Value(0)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(1)).current;
+  const soundRef = useRef(null); // Properly initialize soundRef
 
   useEffect(() => {
+    const loadSound = async () => {
+      const { sound } = await Audio.Sound.createAsync(require('../assets/click-button.mp3'));
+      soundRef.current = sound;
+    };
+
+    loadSound();
+
     Animated.loop(
       Animated.timing(rotateAnim, {
         toValue: 1,
@@ -55,6 +64,12 @@ const Splash = ({ navigation }) => {
         }),
       ])
     ).start();
+
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unloadAsync();
+      }
+    };
   }, [rotateAnim, textOpacity, imageOpacity, buttonOpacity]);
 
   const spin = rotateAnim.interpolate({
@@ -62,17 +77,24 @@ const Splash = ({ navigation }) => {
     outputRange: ['0deg', '360deg'],
   });
 
+  const handlePress = async () => {
+    if (soundRef.current) {
+      await soundRef.current.replayAsync();
+    }
+    navigation.navigate('MainScreen', { screen: 'MainScreen' });
+  };
+
   if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('MainScreen', { screen: 'MainScreen' })}>
+    <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.container}>
         <View style={styles.centeredContainer}>
           <Animated.Image
             style={[styles.image, { transform: [{ rotate: spin }], opacity: imageOpacity }]}
-            source={require('../assets/KA2.png')}
+            source={require('../assets/logo.png')}
           />
           <Animated.View style={[styles.textContainer, { opacity: textOpacity }]}>
             <Text style={styles.mainText}>Swipe Kingdoms:</Text>
@@ -98,8 +120,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   image: {
-    width: width * 0.8,
-    height: width * 0.8,
+    width: width * 0.9,
+    height: width * 0.9,
     position: 'absolute',
   },
   textContainer: {

@@ -1,12 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import CheckBox from 'expo-checkbox';
+import { Audio } from 'expo-av';
 
 const Signup = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSelected, setSelection] = useState(false);
+    const soundRef = useRef(null);
+
+    useEffect(() => {
+        const loadSound = async () => {
+            const { sound } = await Audio.Sound.createAsync(require('../assets/click-button.mp3'));
+            soundRef.current = sound;
+        };
+
+        loadSound();
+
+        return () => {
+            if (soundRef.current) {
+                soundRef.current.unloadAsync();
+            }
+        };
+    }, []);
+
+    const playSound = async () => {
+        if (soundRef.current) {
+            await soundRef.current.replayAsync();
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -40,7 +63,7 @@ const Signup = ({ navigation }) => {
                 <View style={styles.checkboxContainer}>
                     <CheckBox
                         value={isSelected}
-                        onValueChange={setSelection}
+                        onValueChange={(value) => { setSelection(value); playSound(); }}
                         color={isSelected ? '#FF6F61' : undefined}
                     />
                     <Text style={styles.checkboxText}>
@@ -50,10 +73,16 @@ const Signup = ({ navigation }) => {
                 </View>
 
                 <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={styles.signupButton} onPress={() => console.log("Sign Up")}>
+                    <TouchableOpacity 
+                        style={styles.signupButton} 
+                        onPress={async () => { await playSound(); console.log("Sign Up"); }}
+                    >
                         <Text style={styles.signupButtonText}>SIGN UP</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.signinButton} onPress={() => navigation.navigate('Ep1')}>
+                    <TouchableOpacity 
+                        style={styles.signinButton} 
+                        onPress={async () => { await playSound(); navigation.navigate('HomePage'); }}
+                    >
                         <Text style={styles.signinButtonText}>SIGN IN</Text>
                     </TouchableOpacity>
                 </View>

@@ -1,11 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import CheckBox from 'expo-checkbox';
+import { Audio } from 'expo-av';
 
 const Signin = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSelected, setSelection] = useState(false);
+    const soundRef = useRef(null); // Declare soundRef
+
+    useEffect(() => {
+        const loadSound = async () => {
+            const { sound } = await Audio.Sound.createAsync(require('../assets/click-button.mp3'));
+            soundRef.current = sound;
+        };
+
+        loadSound();
+
+        return () => {
+            if (soundRef.current) {
+                soundRef.current.unloadAsync();
+            }
+        };
+    }, []);
+
+    const playSound = async () => {
+        if (soundRef.current) {
+            await soundRef.current.replayAsync();
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -32,7 +55,7 @@ const Signin = ({ navigation }) => {
                 <View style={styles.checkboxContainer}>
                     <CheckBox
                         value={isSelected}
-                        onValueChange={setSelection}
+                        onValueChange={(value) => { setSelection(value); playSound(); }}
                         color={isSelected ? '#00bfff' : undefined}
                     />
                     <View style={styles.checkboxTextContainer}>
@@ -44,13 +67,13 @@ const Signin = ({ navigation }) => {
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+                    <TouchableOpacity onPress={async () => { await playSound(); navigation.navigate('HomePage')}}>
                         <Text style={styles.loginButton}>Log In</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.signupContainer}>
                     <Text style={styles.createAccountText}>Create an account?</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SignupPage')}>
+                    <TouchableOpacity onPress={async () => { await playSound(); navigation.navigate('SignupPage')}}>
                         <Text style={styles.signupText}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>

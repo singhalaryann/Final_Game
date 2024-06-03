@@ -1,17 +1,40 @@
-// SettingsButton.js
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Setting from '../screens/Setting'; 
 import { useNavigation } from '@react-navigation/native';
+import { Audio } from 'expo-av'; // Import Audio component from Expo
 
 const SettingsButton = () => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const animationRef = useRef(null);
   const overlayOpacity = useRef(new Animated.Value(0)).current;
-    const navigation = useNavigation()
+  const navigation = useNavigation();
 
-  const handlePress = () => {
+  // Load sound effect in a useEffect hook
+  useEffect(() => {
+    const loadSound = async () => {
+      const { sound } = await Audio.Sound.createAsync(require('../assets/click-button.mp3'));
+      soundRef.current = sound;
+    };
+
+    loadSound();
+
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unloadAsync();
+      }
+    };
+  }, []);
+
+  const soundRef = useRef(null); // Reference to the sound effect
+
+  const handlePress = async () => {
+    // Play the sound effect when the button is pressed
+    if (soundRef.current) {
+      await soundRef.current.replayAsync();
+    }
+
     if (isOverlayVisible) {
       if (animationRef.current) {
         animationRef.current.play(100, 0);

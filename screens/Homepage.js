@@ -1,11 +1,18 @@
 import React from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity, ImageBackground, Animated } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, ImageBackground, Animated } from "react-native";
+import { Audio } from 'expo-av';
 import SettingsButton from "../components/SettingsButton";
 
 const Homepage = ({ navigation }) => {
   const buttonScale = new Animated.Value(1);
 
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(require('../assets/click-button.mp3'));
+    await sound.playAsync();
+  };
+
   const onPressIn = () => {
+    playSound();
     Animated.spring(buttonScale, {
       toValue: 0.95,
       useNativeDriver: true,
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent overlay for readability
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   homepage: {
     flex: 1,

@@ -2,12 +2,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Animated, PanResponder, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import Cards from '../components/Cards';
 import SettingsButton from '../components/SettingsButton';
-// import CardsChoice from '../components/CardsChoice';
 
 const getImageSource = (activeButton) => {
   switch (activeButton) {
     case 'M':
-      return require('../assets/MLL.png');
+      return require('../assets/Mil.png');
     case 'R':
       return require('../assets/RLL.png');
     case 'E':
@@ -19,7 +18,7 @@ const getImageSource = (activeButton) => {
   }
 };
 
-const backImage = require('../assets/cardBack.png');
+const backImage = require('../assets/logo.png');
 
 const Page1 = ({ navigation, route }) => {
   const { activeButton } = route.params;
@@ -29,10 +28,10 @@ const Page1 = ({ navigation, route }) => {
   const remainingCards = ['M', 'R', 'E', 'S'].filter(button => button !== activeButton);
 
   const initialData = [
-    { image: getImageSource(activeButton), id: 1, title: `${activeButton} Leader`, question: "Do you want to proceed?", choiceL: "Choice 1", choiceR: "choice 2" },
-    { image: getImageSource(remainingCards[0]), id: 2, title: `${remainingCards[0]} Leader`,  question: "Is this the right choice?", choiceL: "Choice 1", choiceR: "choice 2" },
-    { image: getImageSource(remainingCards[1]), id: 3, title: `${remainingCards[1]} Leader`,  question: "Are you sure about this?", choiceL: "Choice 1", choiceR: "choice 2" },
-    { image: getImageSource(remainingCards[2]), id: 4, title: `${remainingCards[2]} Leader`,  question: "Will you take this path?", choiceL: "Choice 1", choiceR: "choice 2" },
+    { image: getImageSource(activeButton), id: 1, title: `${activeButton} Leader`, question: "Do you want to proceed?", choiceL: "Yes", choiceR: "No" },
+    { image: getImageSource(remainingCards[0]), id: 2, title: `${remainingCards[0]} Leader`, question: "Is this the right choice?", choiceL: "Yes", choiceR: "No" },
+    { image: getImageSource(remainingCards[1]), id: 3, title: `${remainingCards[1]} Leader`, question: "Are you sure about this?", choiceL: "Yes", choiceR: "No" },
+    { image: getImageSource(remainingCards[2]), id: 4, title: `${remainingCards[2]} Leader`, question: "Will you take this path?", choiceL: "Yes", choiceR: "No" },
   ];
 
   const [data, setData] = useState(initialData);
@@ -183,7 +182,7 @@ const Page1 = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -193,10 +192,6 @@ const styles = StyleSheet.create({
     width: '90%',
     position: 'absolute',
     top: 50,
-  },
-  icon: {
-    width: 40,
-    height: 40,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -215,7 +210,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   activeButton: {
-    backgroundColor: 'green',
+    backgroundColor: '#28a745',
   },
   buttonLabel: {
     fontSize: 22,
@@ -223,18 +218,22 @@ const styles = StyleSheet.create({
   },
   cardTitleContainer: {
     position: 'absolute',
-    top: 200,
+    top: 150,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10,
+    padding: 10,
   },
   cardTitle: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
+    textAlign: 'center',
   },
   cardContainer: {
     position: 'absolute',
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 });
 
