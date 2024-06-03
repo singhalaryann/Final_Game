@@ -18,7 +18,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash" screenOptions={{ presentation: "transparentModal" }}>
+      <Stack.Navigator initialRouteName="Splash" screenOptions={{presentation: 'transparentModal'}}>
         <Stack.Screen
           name="Splash"
           component={Splash}

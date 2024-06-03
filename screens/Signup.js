@@ -53,7 +53,7 @@ const Signup = ({ navigation }) => {
                     <TouchableOpacity style={styles.signupButton} onPress={() => console.log("Sign Up")}>
                         <Text style={styles.signupButtonText}>SIGN UP</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.signinButton} onPress={() => navigation.navigate('SigninPage')}>
+                    <TouchableOpacity style={styles.signinButton} onPress={() => navigation.navigate('Ep1')}>
                         <Text style={styles.signinButtonText}>SIGN IN</Text>
                     </TouchableOpacity>
                 </View>
