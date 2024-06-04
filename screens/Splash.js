@@ -14,7 +14,7 @@ const Splash = ({ navigation }) => {
   const textOpacity = useRef(new Animated.Value(0)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(1)).current;
-  const soundRef = useRef(null); // Properly initialize soundRef
+  const soundRef = useRef(null);
 
   useEffect(() => {
     const loadSound = async () => {
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Michroma-Regular',
+    marginTop: -10,
   },
   tapText: {
     color: 'white',

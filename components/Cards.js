@@ -1,24 +1,34 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 
-const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
+const Cards = ({ items, backImage, isFirst, swipe, flipAnim, opacityAnim, ...rest }) => {
   const rotate = swipe.x.interpolate({
     inputRange: [-100, 0, 100],
     outputRange: ['-8deg', '0deg', '8deg'],
   });
 
-  const frontOpacity = flipAnim.interpolate({
+  const frontOpacityFirst = flipAnim.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [0, 0, 1],
   });
 
-  const backOpacity = flipAnim.interpolate({
+  const backOpacityFirst = flipAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1, 1, 0],
+  });
+
+  const frontOpacity = opacityAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0, 0, 1],
+  })
+
+  const backOpacity = opacityAnim.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [1, 1, 0],
   });
 
   const frontAnimatedStyle = {
-    opacity: frontOpacity,
+    opacity: isFirst ? frontOpacityFirst : frontOpacity,
     transform: [{
       rotateY: flipAnim.interpolate({
         inputRange: [0, 1],
@@ -28,7 +38,7 @@ const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
   };
 
   const backAnimatedStyle = {
-    opacity: backOpacity,
+    opacity: isFirst? backOpacityFirst : backOpacity,
     transform: [{
       rotateY: flipAnim.interpolate({
         inputRange: [0, 1],
@@ -61,12 +71,12 @@ const Cards = ({ items, backImage, isFirst, swipe, flipAnim, ...rest }) => {
         <Image style={styles.cardImage} source={items.image} />
         <View style={styles.textContainer}>
           <Animated.Text style={[styles.cardChoice, styles.cardChoice1, { opacity: choice1Opacity }]}>
-            {items.choiceL}
+            {items.choices[0]}
           </Animated.Text>
           <Animated.Text style={[styles.cardChoice, styles.cardChoice2, { opacity: choice2Opacity }]}>
-            {items.choiceR}
+            {items.choices[1]}
           </Animated.Text>
-          <Text style={styles.cardTitle}>{items.title}</Text>
+          <Text style={styles.cardTitle}>{items.name}</Text>
         </View>
       </Animated.View>
     </Animated.View>
@@ -80,10 +90,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
     shadowColor: 'black',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
     width: 350,
     height: 450,
     margin: 60,
@@ -110,12 +120,9 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 10,
     right: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    borderRadius: 10,
-    padding: 5,
   },
   cardTitle: {
-    fontSize: 24,
+    fontSize: 28,
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
@@ -127,8 +134,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cardChoice1: {
-    bottom: 380,
-    left: 20,
+  bottom: 380,
+  left: 20,
   },
   cardChoice2: {
     bottom: 380,
