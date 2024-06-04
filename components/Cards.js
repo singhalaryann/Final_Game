@@ -71,12 +71,12 @@ const Cards = ({ items, backImage, isFirst, swipe, flipAnim, opacityAnim, ...res
         <Image style={styles.cardImage} source={items.image} />
         <View style={styles.textContainer}>
           <Animated.Text style={[styles.cardChoice, styles.cardChoice1, { opacity: choice1Opacity }]}>
-            {items.choiceL}
+            {items.choices[0]}
           </Animated.Text>
           <Animated.Text style={[styles.cardChoice, styles.cardChoice2, { opacity: choice2Opacity }]}>
-            {items.choiceR}
+            {items.choices[1]}
           </Animated.Text>
-          <Text style={styles.cardTitle}>{items.title}</Text>
+          <Text style={styles.cardTitle}>{items.name}</Text>
         </View>
       </Animated.View>
     </Animated.View>

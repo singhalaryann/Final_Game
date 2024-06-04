@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Animated, PanResponder, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
+import { View, Animated, PanResponder, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import Cards from '../components/Cards';
 import SettingsButton from '../components/SettingsButton';
-// import CardsChoice from '../components/CardsChoice';
 
 const getImageSource = (activeButton) => {
   switch (activeButton) {
@@ -22,72 +21,100 @@ const getImageSource = (activeButton) => {
 const backImage = require('../assets/cardBack.png');
 
 const Page1 = ({ navigation, route }) => {
-  const [episodeData, setEpisodeData] = useState(null);
+  const [agents, setAgents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const { activeButton } = route.params;
   const [currentButton, setCurrentButton] = useState(activeButton);
   const [cardsPlaced, setCardsPlaced] = useState(false);
 
-  const remainingCards = ['M', 'R', 'E', 'S'].filter(button => button !== activeButton);
-
-  const initialData = [
-    { image: getImageSource(activeButton), id: 1, title: `${activeButton} Leader`, question: "Do you want to proceed?", choiceL: "Choice 1", choiceR: "choice 2" },
-    { image: getImageSource(remainingCards[0]), id: 2, title: `${remainingCards[0]} Leader`,  question: "Is this the right choice?", choiceL: "Choice 1", choiceR: "choice 2" },
-    { image: getImageSource(remainingCards[1]), id: 3, title: `${remainingCards[1]} Leader`,  question: "Are you sure about this?", choiceL: "Choice 1", choiceR: "choice 2" },
-    { image: getImageSource(remainingCards[2]), id: 4, title: `${remainingCards[2]} Leader`,  question: "Will you take this path?", choiceL: "Choice 1", choiceR: "choice 2" },
-  ];
-
-  const [data, setData] = useState(initialData);
-
   const swipe = useRef(new Animated.ValueXY()).current;
-  const scales = initialData.map(() => useRef(new Animated.Value(0)).current);
-  const positions = initialData.map(() => useRef(new Animated.ValueXY({ x: -500, y: -800 })).current);
-  const flipAnims = initialData.map(() => useRef(new Animated.Value(0)).current);
+  const scales = useRef([]).current;
+  const positions = useRef([]).current;
+  const flipAnims = useRef([]).current;
   const currIndex = useRef(0);
 
-  useEffect(() => {
-    const staggerDelay = 200; // Delay between each card animation
-    initialData.forEach((_, index) => {
-      setTimeout(() => {
-        Animated.parallel([
-          Animated.spring(positions[index], {
-            toValue: { x: 0, y: 0 },
-            useNativeDriver: true,
-            friction: 5,
-            tension: 10,
-          }),
-          Animated.spring(scales[index], {
-            toValue: 1,
-            useNativeDriver: true,
-            friction: 5,
-            tension: 10,
-          }),]).start(() => {
-          // Start flip animation only for the first card
-          // if (index === 0) {
-          //   Animated.spring(flipAnims[index], {
-          //     toValue: 1,
-          //     useNativeDriver: true,
-          //     friction: 5,
-          //     tension: 10,
-          //   }).start();
-          // } else {
-          //   // Add a delay for other cards
-          //   setTimeout(() => {
-          //     flipAnims[index].setValue(0);
-          //     if (index >= 3) {
-          //       setCardsPlaced(true);
-          //     }
-          //   }, staggerDelay * 2 * index); // Apply staggered delay
-          // }
-          if(index >= 3)
-            FlipNextCard();
-        });
-      }, (initialData.length - index - 1) * staggerDelay); // Apply staggered delay in reverse order
-    });
+  const readData = async () => {
+    try {
+      const data = require('../db.json').episodes[0].cards;
+      let arr = [];
+      let temp = {};
+      for (let index = 0; index < data.length; index++) {
+        const firstOrNot = data[index].agent[0] === activeButton;
+        if (firstOrNot) {
+          temp = {
+            name: data[index].agent,
+            isFirst: firstOrNot,
+            question: data[index].content,
+            choices: [data[index].choices.left.text, data[index].choices.right.text],
+            image: getImageSource(data[index].agent[0]),
+            isDecided: false,
+          };
+        } else {
+          arr.push({
+            name: data[index].agent,
+            isFirst: firstOrNot,
+            question: data[index].content,
+            choices: [data[index].choices.left.text, data[index].choices.right.text],
+            image: getImageSource(data[index].agent[0]),
+            isDecided: false,
+          });
+        }
+      }
+      arr = [temp].concat(arr);
+      setAgents(arr);
+      setDataLoaded(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    return () => {
-      initialData.forEach((_, index) => clearTimeout(index));
-    };
-  }, [cardsPlaced]);
+  const handleDataLoaded = useCallback(() => {
+    if (dataLoaded && loading) {
+      const staggerDelay = 200; // Delay between each card animation
+      agents.forEach((_, index) => {
+        scales[index] = new Animated.Value(0);
+        positions[index] = new Animated.ValueXY({ x: -500, y: -800 });
+        flipAnims[index] = new Animated.Value(0);
+      });
+      setLoading(false);
+
+      agents.forEach((_, index) => {
+        setTimeout(() => {
+          Animated.parallel([
+            Animated.spring(positions[index], {
+              toValue: { x: 0, y: 0 },
+              useNativeDriver: true,
+              friction: 5,
+              tension: 10,
+            }),
+            Animated.spring(scales[index], {
+              toValue: 1,
+              useNativeDriver: true,
+              friction: 5,
+              tension: 10,
+            }),
+          ]).start(() => {
+            if (index >= agents.length - 1) {
+              FlipNextCard();
+            }
+          });
+        }, (agents.length - index - 1) * staggerDelay); // Apply staggered delay in reverse order
+      });
+
+      return () => {
+        agents.forEach((_, index) => clearTimeout(index));
+      };
+    }
+  }, [agents, loading, dataLoaded]);
+
+  useEffect(() => {
+    readData();
+  }, []);
+
+  useEffect(() => {
+    handleDataLoaded();
+  }, [agents, loading, dataLoaded])
 
   const FlipNextCard = () => {
     Animated.spring(flipAnims[currIndex.current], {
@@ -97,7 +124,7 @@ const Page1 = ({ navigation, route }) => {
       tension: 10,
     }).start();
     setCardsPlaced(true);
-  }
+  };
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => cardsPlaced,
@@ -125,27 +152,47 @@ const Page1 = ({ navigation, route }) => {
   });
 
   const removeCard = useCallback((direction) => {
-    console.log(currentButton);
-    if(direction > 0) {
-      console.log("Choice: left");
-    } else {
-      console.log("Choice: right");
-    }
-    currIndex.current = currIndex.current + 1;
-
-    setData((prevState) => {
-      if (prevState.length > 1) {
-        const nextCard = prevState[1].title.split(' ')[0].charAt(0);
-        setCurrentButton(nextCard);
-        
+    console.log("Direction: ", direction);
+    let arr = [...agents];
+    let allComplete = true;
+    arr.forEach((item, _) => {
+      if (item.name[0] === currentButton) {
+        item.isDecided = true;
       }
-      return prevState.slice(1);
+      if (!item.isDecided) {
+        allComplete = false;
+      }
     });
-    swipe.setValue({ x: 0, y: 0 });
-    if (data.length === 1) {
+
+    if (allComplete) {
       navigation.navigate('Ep1', { animate: true });
+      return;
     }
-  }, [data.length, navigation, swipe, currentButton]);
+
+    var set = false;
+    if(!allComplete) {
+      arr.forEach((item, _) => {
+        if(!set && !item.isDecided) {
+          setCurrentButton(item.name[0]);
+          set = true;
+        }
+      })
+    }
+
+    currIndex.current = currIndex.current + 1;
+    setAgents(arr);
+    FlipNextCard();
+
+    swipe.setValue({ x: 0, y: 0 })
+  }, [agents, currentButton, navigation, swipe]);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -165,28 +212,26 @@ const Page1 = ({ navigation, route }) => {
           </View>
         ))}
       </View>
-      {data.length > 0 && (
-        <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitle}>{data[0].question}</Text>
-        </View>
-      )}
-      {data.map((item, index) => {
-        const isFirst = index === 0;
-        const dragHandlers = isFirst ? panResponder.panHandlers : {};
+      {agents.map((item, index) => {
+        const isFirst = item.isFirst;
+        const isTop = (item.name[0] === currentButton);
+        const dragHandlers = (isTop) ? panResponder.panHandlers : {};
         const cardStyle = {
-          opacity: scales[index],
+          opacity: 1,
           transform: [
-            { translateX: positions[index].x },
-            { translateY: positions[index].y },
-            { scale: scales[index] },
-            ...(isFirst ? swipe.getTranslateTransform() : [])
+            { translateX: positions[index]?.x ?? 0 },
+            { translateY: positions[index]?.y ?? 0 },
+            { scale: scales[index] ?? 1 },
+            ...(isTop ? swipe.getTranslateTransform() : [])
           ],
         };
 
-        return (
-          <Animated.View key={item.id} style={[styles.cardContainer, cardStyle]} {...dragHandlers}>
-            <Cards backImage={backImage} items={item} isFirst={isFirst} swipe={swipe} flipAnim={flipAnims[index]} opacityAnim={flipAnims[index]} />
-          </Animated.View>
+        return (!item.isDecided &&
+          <View key={index}>
+            <Animated.View key={item.id} style={[styles.cardContainer, cardStyle]} {...dragHandlers}>
+              <Cards backImage={backImage} items={item} isFirst={isFirst} swipe={swipe} flipAnim={flipAnims[index]} opacityAnim={flipAnims[index]} />
+            </Animated.View>
+          </View>
         );
       }).reverse()}
       <View style={styles.iconsContainer}>
@@ -250,7 +295,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  cardImage: {
+    width: 100,
+    height: 100,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
