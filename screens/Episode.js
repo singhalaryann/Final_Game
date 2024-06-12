@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, Animated } from 'react-native';
 import Modal from 'react-native-modal';
 import SettingsButton from '../components/SettingsButton';
+import { fetchStory } from '../RNPackage/Backend/loreai';
 
 const { height: windowHeight } = Dimensions.get('window');
 
@@ -13,6 +14,9 @@ const Episode = ({ navigation, route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [shouldRunAnimation, setShouldRunAnimation] = useState(true);
+  const [story, setStory] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFetchingEpisode, setIsFetchingEpisode] = useState(false);
 
   const headerScale = useRef(new Animated.Value(0)).current;
   const newsScales = Array.from({ length: 4 }).map(() => useRef(new Animated.Value(0)).current);
@@ -51,6 +55,42 @@ const Episode = ({ navigation, route }) => {
     setEpisodeData(data);
     console.log("Fetched data");
   };
+
+  const fetchData = async () => {
+    try {
+      let storyData = await fetchStory(1);
+      console.log(storyData);
+      setStory(storyData);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Failed to fetch story:', error);
+    }
+  };
+
+  const fetchFirstEpisode = async () => {
+    try {
+      let response = await fetchFirstEpisode(story, "idk", "idk");
+      setStory(response)
+      setIsFetchingEpisode(false);
+    } catch (error) {
+      console.error('Failed to fetch first episode:', error);
+    }
+  };
+
+  useEffect(() => {
+    if(isLoading) {
+      fetchData();
+      return;
+    }
+
+    if(story && story.Eps.length < 1) {
+      setIsFetchingEpisode(true);
+    }
+
+    if(isFetchingEpisode) {
+      fetchFirstEpisode();
+    }
+  })
   
   useFocusEffect(
     useCallback(() => {
