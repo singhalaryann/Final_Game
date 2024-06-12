@@ -18,7 +18,7 @@ const getImageSource = (activeButton) => {
   }
 };
 
-const backImage = require('../assets/cardBack.png');
+const backImage = require('../assets/logo.png');
 
 const Page1 = ({ navigation, route }) => {
   const [agents, setAgents] = useState([]);
