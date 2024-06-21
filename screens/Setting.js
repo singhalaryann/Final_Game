@@ -67,14 +67,14 @@ const Setting = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => console.log("OK pressed")}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
             <Text style={styles.buttonText}>OK</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
             <Text style={styles.buttonText}>BACK</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate('HomePage')}>
+        <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate('MainScreen')}>
           <Text style={styles.buttonText}>LOGOUT</Text>
         </TouchableOpacity>
       </View>
