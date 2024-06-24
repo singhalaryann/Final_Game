@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NewGame",
-    "slug": "NewGame",
+    "name": "Kings AI",
+    "slug": "KingsAI",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,18 +18,25 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.renzov.Kings"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font"
-    ],
+    // "plugins": [
+    //   "expo-font"
+    // ],
     "fonts": {
       "customFont": {
         "asset": "./assets/fonts/Jacquard 24 Charted.ttf"
       }
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c633fa60-8fe2-45b2-8664-422784723397"
+      }
+    },
+    "owner": "renzov"
   }
 }
